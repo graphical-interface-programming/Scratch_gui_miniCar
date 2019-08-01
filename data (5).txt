@@ -1,0 +1,73 @@
+{"25A^+Gz)naiIx:ucs,EZ":{
+	"id":"25A^+Gz)naiIx:ucs,EZ",
+	"opcode":"operator_gt",
+	"inputs":{
+		"OPERAND1":{
+			"name":"OPERAND1",
+			"block":"f~L~o13=!j1muhBJr,+I",
+			"shadow":"f~L~o13=!j1muhBJr,+I"
+		},
+		"OPERAND2":{
+			"name":"OPERAND2",
+			"block":"bfy4evIu-8tF`ctcw=%C",
+			"shadow":"bfy4evIu-8tF`ctcw=%C"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"7M[q]E-3re]$#{;}!rWe",
+	"shadow":false,
+	"x":225.94675925925907,
+	"y":420.5925925925936
+},
+"f~L~o13=!j1muhBJr,+I":{
+	"id":"f~L~o13=!j1muhBJr,+I",
+	"opcode":"text",
+	"inputs":{},
+	"fields":{
+		"TEXT":{
+			"name":"TEXT",
+			"value":"8"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"25A^+Gz)naiIx:ucs,EZ",
+	"shadow":true,
+	"x":425.96238425925935,
+	"y":518.3703703703711
+},
+"bfy4evIu-8tF`ctcw=%C":{
+	"id":"bfy4evIu-8tF`ctcw=%C",
+	"opcode":"text",
+	"inputs":{},
+	"fields":{
+		"TEXT":{
+			"name":"TEXT",
+			"value":"50"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"25A^+Gz)naiIx:ucs,EZ",
+	"shadow":true
+},
+"7M[q]E-3re]$#{;}!rWe":{
+	"id":"7M[q]E-3re]$#{;}!rWe",
+	"opcode":"control_repeat_until",
+	"inputs":{
+		"CONDITION":{
+			"name":"CONDITION",
+			"block":"25A^+Gz)naiIx:ucs,EZ",
+			"shadow":null
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":168.03645833333337,
+	"y":295.5555555555562
+}}
