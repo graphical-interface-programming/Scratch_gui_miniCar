@@ -1,0 +1,172 @@
+{"vB4X+Wu-+UIU*%vquR1}":{		//积木id（类似map中的key）
+	"id":"vB4X+Wu-+UIU*%vquR1}",	//对象内部保存自身的id
+	"opcode":"event_whenflagclicked",	//积木种类
+
+	//input和fields两个同时最多只有一个有值，当shadow属性为true时，fields有值，否则input可以有值（也可以没有）
+	//目前没找到同时有值的类型
+	"inputs":{},			//储存嵌套的代码块
+	"fields":{},				//储存插入的数字和字符串
+	"next":"}Y48F1cHnlh)MY!=F%j3",	//下一个积木
+	"topLevel":true,			//是否为队首
+	"parent":null,			//上一个积木
+	"shadow":false,
+	"x":297.9259259259259,
+	"y":207.25925925925935
+},
+"}Y48F1cHnlh)MY!=F%j3":{
+	"id":"}Y48F1cHnlh)MY!=F%j3",
+	"opcode":"control_forever",
+	"inputs":{
+		"SUBSTACK":{		//内嵌代码块
+			"name":"SUBSTACK",
+			"block":"/z*|y)1U/Sy[64}_@uWB",
+			"shadow":null
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"vB4X+Wu-+UIU*%vquR1}",
+	"shadow":false,
+	"x":"-358",
+	"y":"271"
+},
+"|+{AeuQ{RmVxBW6ETOpj":{
+	"id":"|+{AeuQ{RmVxBW6ETOpj",
+	"opcode":"motion_movesteps",
+	"inputs":{
+		"STEPS":{
+			"name":"STEPS",
+			"block":"ClcG+l;LjY*)[fO?5mMK",
+			"shadow":"ClcG+l;LjY*)[fO?5mMK"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"/z*|y)1U/Sy[64}_@uWB",
+	"shadow":false,
+	"x":469.18518518518516,
+	"y":357.18518518518533
+},
+"ClcG+l;LjY*)[fO?5mMK":{
+	"id":"ClcG+l;LjY*)[fO?5mMK",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"10"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"|+{AeuQ{RmVxBW6ETOpj",
+	"shadow":true
+},
+"/z*|y)1U/Sy[64}_@uWB":{
+	"id":"/z*|y)1U/Sy[64}_@uWB",
+	"opcode":"control_if_else",
+	"inputs":{
+		"SUBSTACK":{
+			"name":"SUBSTACK",
+			"block":"}dVYFz%tefn@GmQpgO%;",
+			"shadow":null
+		},
+		"SUBSTACK2":{
+			"name":"SUBSTACK2",
+			"block":"|+{AeuQ{RmVxBW6ETOpj",
+			"shadow":null
+		},
+		"CONDITION":{
+			"name":"CONDITION",
+			"block":"OAda}h_U}s|CCdW0(m$a",
+			"shadow":null
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"}Y48F1cHnlh)MY!=F%j3",
+	"shadow":false,
+	"x":"-358",
+	"y":"535"
+},
+"OAda}h_U}s|CCdW0(m$a":{
+	"id":"OAda}h_U}s|CCdW0(m$a",
+	"opcode":"sensing_touchingobject",
+	"inputs":{
+		"TOUCHINGOBJECTMENU":{
+			"name":"TOUCHINGOBJECTMENU",
+			"block":"2V#,}c!NA|S~Hj8};gi,",
+			"shadow":"2V#,}c!NA|S~Hj8};gi,"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"/z*|y)1U/Sy[64}_@uWB",
+	"shadow":false,
+	"x":"-358",
+	"y":"240"
+},
+"2V#,}c!NA|S~Hj8};gi,":{
+	"id":"2V#,}c!NA|S~Hj8};gi,",
+	"opcode":"sensing_touchingobjectmenu",
+	"inputs":{},
+	"fields":{
+		"TOUCHINGOBJECTMENU":{
+			"name":"TOUCHINGOBJECTMENU",
+			"value":"_edge_"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"OAda}h_U}s|CCdW0(m$a",
+	"shadow":true
+},
+"}dVYFz%tefn@GmQpgO%;":{
+	"id":"}dVYFz%tefn@GmQpgO%;",
+	"opcode":"motion_ifonedgebounce",
+	"inputs":{},
+	"fields":{},
+	"next":".vNi0z{V:n~^Y?!SJLi7",
+	"topLevel":false,
+	"parent":"/z*|y)1U/Sy[64}_@uWB",
+	"shadow":false,
+	"x":"-358",
+	"y":"306"
+},
+".vNi0z{V:n~^Y?!SJLi7":{
+	"id":".vNi0z{V:n~^Y?!SJLi7",
+	"opcode":"motion_turnright",
+	"inputs":{
+		"DEGREES":{
+			"name":"DEGREES",
+			"block":"}/h3=S{f|D;*JmZgLYjG",
+			"shadow":"}/h3=S{f|D;*JmZgLYjG"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"}dVYFz%tefn@GmQpgO%;",
+	"shadow":false,
+	"x":"-358",
+	"y":"135"
+},
+"}/h3=S{f|D;*JmZgLYjG":{
+	"id":"}/h3=S{f|D;*JmZgLYjG",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"15"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":".vNi0z{V:n~^Y?!SJLi7",
+	"shadow":true
+}}

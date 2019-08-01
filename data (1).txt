@@ -1,0 +1,108 @@
+{"nl6IpVWZ,G*;vH{-#$~X":{
+	"id":"nl6IpVWZ,G*;vH{-#$~X",
+	"opcode":"event_whenflagclicked",
+	"inputs":{},
+	"fields":{},
+	"next":"c1B6Y(W~-c5iCh)AQPhY",
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":417.9259259259258,
+	"y":192.44444444444457
+},
+"E.,qnx)D4Ze0ly|?b(^F":{
+	"id":"E.,qnx)D4Ze0ly|?b(^F",
+	"opcode":"motion_turnright",
+	"inputs":{
+		"DEGREES":{
+			"name":"DEGREES",
+			"block":"y^L]Ekq;xGKSR,$M5rtA",
+			"shadow":"y^L]Ekq;xGKSR,$M5rtA"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"c1B6Y(W~-c5iCh)AQPhY",
+	"shadow":false,
+	"x":417.9259259259258,
+	"y":240.44444444444457
+},
+"y^L]Ekq;xGKSR,$M5rtA":{
+	"id":"y^L]Ekq;xGKSR,$M5rtA",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"15"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"E.,qnx)D4Ze0ly|?b(^F",
+	"shadow":true
+},
+"!.8x:Y8$l_Y#@PTA_#o-":{
+	"id":"!.8x:Y8$l_Y#@PTA_#o-",
+	"opcode":"event_whenthisspriteclicked",
+	"inputs":{},
+	"fields":{},
+	"next":"~)6N|ch{TZw!?QM7T/nz",
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":678.6666666666667,
+	"y":191.555555555556
+},
+"~)6N|ch{TZw!?QM7T/nz":{
+	"id":"~)6N|ch{TZw!?QM7T/nz",
+	"opcode":"motion_goto",
+	"inputs":{
+		"TO":{
+			"name":"TO",
+			"block":";:3nr]Jhg(Jj/!WkfC/#",
+			"shadow":";:3nr]Jhg(Jj/!WkfC/#"
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"!.8x:Y8$l_Y#@PTA_#o-",
+	"shadow":false,
+	"x":"-358",
+	"y":"283"
+},
+";:3nr]Jhg(Jj/!WkfC/#":{
+	"id":";:3nr]Jhg(Jj/!WkfC/#",
+	"opcode":"motion_goto_menu",
+	"inputs":{},
+	"fields":{
+		"TO":{
+			"name":"TO",
+			"value":"_random_"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"~)6N|ch{TZw!?QM7T/nz",
+	"shadow":true
+},
+"c1B6Y(W~-c5iCh)AQPhY":{
+	"id":"c1B6Y(W~-c5iCh)AQPhY",
+	"opcode":"control_forever",
+	"inputs":{
+		"SUBSTACK":{
+			"name":"SUBSTACK",
+			"block":"E.,qnx)D4Ze0ly|?b(^F",
+			"shadow":null
+		}
+	},
+	"fields":{},
+	"next":null,
+	"topLevel":false,
+	"parent":"nl6IpVWZ,G*;vH{-#$~X",
+	"shadow":false,
+	"x":290.5185185185184,
+	"y":278.37037037037055
+}}

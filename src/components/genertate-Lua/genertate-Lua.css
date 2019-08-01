@@ -1,0 +1,22 @@
+@import "../../css/colors.css";
+
+.genertate-Lua {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+.genertate-Lua:hover {
+    background-color: $motion-light-transparent;
+}
+
+.genertate-Lua {
+    opacity: 0.5;
+}
+
+.genertate-Lua.is-active {
+    background-color: $motion-transparent;
+}
