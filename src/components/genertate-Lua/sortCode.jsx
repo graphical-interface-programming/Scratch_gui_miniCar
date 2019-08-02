@@ -1,29 +1,24 @@
 import saveAs from './FileSaver.js';
 import defaultCodes from './sources/seperate/default_codes.js';
 import starter from './sources/seperate/starter.js';
-// eslint-disable-next-line camelcase
-import led_ReceiveData from './sources/seperate/Led_Receive.js';
-import DigiLed_ReceiveData from './sources/seperate/DigiLed_Receive.js';
-import DigiLedZXM_ReceiveData from './sources/seperate/DigiLedZXM_Receive.js';
-import send_CanData from './sources/seperate/Send_CanData.js';
-import judge_WhileOrBlack from './sources/seperate/Judge_WhiteOrBlack.js';
+
 /**
  * 写文件
- * @param data string 要写的数据
- * @param fileName string 文件名
+ * @param {string} data 要写的数据
+ * @param {string} fileName 文件名
  */
-function fileWriter (data = {}, fileName = ' ') {
+function fileWriter (data = '', fileName = ' ') {
     const file = new File([data], {type: 'text/plain;charset=utf-8'});
     saveAs(file, fileName);
 }
 
 /**
  * 获得blocks链首
- * @param data blocks输入的Json对象
- * @return {*} 链表队首block
+ * @param {JSON} data blocks输入的Json对象
+ * @return {Array} 链表队首block
  */
 function getHats (data = {}) {
-    if (data === {}) return;
+    if (data === {}) return [];
     let hats = [];
     for (let id in data){
         if (data[id].topLevel === true) {
@@ -35,8 +30,8 @@ function getHats (data = {}) {
 
 /**
  * 获取缩进
- * @param depth 缩进深度
- * @return {string|string} 缩进字符串
+ * @param {number} depth 缩进深度
+ * @return {string} 缩进字符串
  */
 function getIndent (depth) {
     let result = '';
@@ -44,17 +39,30 @@ function getIndent (depth) {
     return result;
 }
 
-// 处理输入不全的情况
-function nextCode (data, blockPart, depth) {
-    return (blockPart == null) ? 'missing block' : dealWithABlock(data, blockPart.block, depth);
+/**
+ * 处理输入不全的情况
+ * @param {JSON} data 输入数据的Json对象
+ * @param {JSON} blockPart 下一个要处理的block的Json对象域
+ * @param {number} depth 缩进深度
+ * @param {function} func 生成代码的方法
+ * @return {string} 下一部分lua代码
+ */
+function nextCode (data, blockPart, depth, func) {
+    return (blockPart == null) ? (getIndent(depth) + 'missing block' + func()) : func(data, blockPart.block, depth);
 }
 
 // 以下方法都是按block种类生成对应lua代码
+/**
+ * @param {JSON} data 输入数据的Json对象
+ * @param {JSON} block 要处理block的Json对象
+ * @param {number} depth 缩进深度
+ * @return {string} 相应的lua代码
+ */
 function handleControlForever (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'while(true)\n' +
         indent + 'do\n' +
-        nextCode(data, block.inputs.SUBSTACK, depth + 1) +
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
         indent + 'end\n';
     return result;
 }
@@ -62,8 +70,8 @@ function handleControlForever (data, block, depth) {
 function handleControlIf (data, block, depth) {
     const indent = getIndent(depth);
     // maybe should change it with function 'dealWithCondition'
-    const result = indent + 'if( ' + nextCode(data, block.inputs.CONDITION, 0) + ' ) then\n'+
-        nextCode(data, block.inputs.SUBSTACK, depth + 1) +
+    const result = indent + 'if ' + nextCode(data, block.inputs.CONDITION, 0, dealWithABlock) + ' then\n'+
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
         indent + 'end\n';
     return result;
 }
@@ -71,46 +79,45 @@ function handleControlIf (data, block, depth) {
 function handleControlIfElse (data, block, depth) {
     const indent = getIndent(depth);
     // maybe should change it with function 'dealWithCondition'
-    const result = indent + 'if( ' + nextCode(data, block.inputs.CONDITION, 0) + ' ) then\n'+
-        nextCode(data, block.inputs.SUBSTACK, depth + 1) +
+    const result = indent + 'if ' + nextCode(data, block.inputs.CONDITION, 0, dealWithABlock) + ' then\n'+
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
         indent + 'else\n' +
-        nextCode(data, block.inputs.SUBSTACK2, depth + 1) +
+        nextCode(data, block.inputs.SUBSTACK2, depth + 1, dealWithAHat) +
         indent + 'end\n';
     return result;
 }
 
 function handControlReapeatUntil (data, block, depth) {
     const indent = getIndent(depth);
-    // maybe should change it with function 'dealWithCondition'
     const result = indent + 'repeat\n' +
-        nextCode(data, block.inputs.SUBSTACK, depth + 1) +
-        indent + 'until ( ' + nextCode(data, block.inputs.CONDITION, 0) + ' )\n';
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
+        indent + 'until ' + nextCode(data, block.inputs.CONDITION, 0, dealWithABlock) + '\n';
     return result;
 }
 
 // 统一处理四则运算
+// opcodes 为运算操作符(String)
 function handNumOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
-    const result = indent + '( ' + nextCode(data, block.inputs.NUM1, 0) +
+    const result = indent + '( ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) +
         ' ' + opcodes + ' ' +
-        nextCode(data, block.inputs.NUM2, 0) + ' )';
+        nextCode(data, block.inputs.NUM2, 0, dealWithABlock) + ' )';
     return result;
 }
 
 // 统一处理布尔值判断（取反除外）
 function handBooleanOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
-    const result = indent + '( ' + nextCode(data, block.inputs.OPERAND1, 0) +
+    const result = indent + '( ' + nextCode(data, block.inputs.OPERAND1, 0, dealWithABlock) +
         ' ' + opcodes + ' ' +
-        nextCode(data, block.inputs.OPERAND2, 0) + ' )';
+        nextCode(data, block.inputs.OPERAND2, 0, dealWithABlock) + ' )';
     return result;
 }
 
 // 处理布尔取反
 function handOperatiorNot (data, block, depth) {
     const indent = getIndent(depth);
-    const result = indent + '( not' + nextCode(data, block.inputs.OPERAND1, 0) + ' )';
-    return result;
+    return indent + '( not' + nextCode(data, block.inputs.OPERAND, 0, dealWithABlock) + ' )';
 }
 
 // 获取input中的数字
@@ -174,24 +181,25 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
 
 /**
  * 生成一个blocks链对应的lua代码
- * @param data 输入blocks的JSON对象
- * @param hatID 队首block的id
+ * @param data {JSON} 输入blocks的JSON对象
+ * @param hatID {String} 队首block的id
+ * @param depth {number} 代码深度
  * @return {string} 队列对应的lua代码
  */
-function dealWithAHat (data = {}, hatID = '') {
-    if (data === {} || hatID === '') return '';
+function dealWithAHat (data = {}, hatID = '', depth = 0) {
+    if (data === {} || hatID === '') return '\n';
     let next = hatID;
     let result = '';
     while (next !== null){
-        result = result + dealWithABlock(data, next, 0);
+        result = result + dealWithABlock(data, next, depth);
         next = data[next].next;
     }
-    return `${result}\n`;
+    return result;
 }
 
 /**
  * 获取lua代码根函数
- * @param data 输入blocks的JSON对象
+ * @param data {JSON} 输入blocks的JSON对象
  */
 const getCode = function (data = {}) {
     if (data === {}) return;
