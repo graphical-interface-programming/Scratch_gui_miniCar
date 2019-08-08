@@ -35,7 +35,7 @@ const motion = function (isStage, targetId) {
                 </shadow>
             </value>
         </block>
-        ${blockSeparator}
+        ${blockSeparator} <!--
         <block type="motion_goto">
             <value name="TO">
                 <shadow type="motion_goto_menu">
@@ -129,7 +129,7 @@ const motion = function (isStage, targetId) {
         <block type="motion_ifonedgebounce"/>
         ${blockSeparator}
         <block type="motion_setrotationstyle"/>
-        ${blockSeparator}
+        ${blockSeparator}-->
         <block id="${targetId}_xposition" type="motion_xposition"/>
         <block id="${targetId}_yposition" type="motion_yposition"/>
         <block id="${targetId}_direction" type="motion_direction"/>`}
@@ -156,7 +156,7 @@ const looks = function (isStage, targetId, costumeName, backdropName) {
     return `
     <category name="%{BKY_CATEGORY_LOOKS}" id="looks" colour="#9966FF" secondaryColour="#774DCB">
         ${isStage ? '' : `
-        <block type="looks_sayforsecs">
+       /* <block type="looks_sayforsecs">
             <value name="MESSAGE">
                 <shadow type="text">
                     <field name="TEXT">${hello}</field>
@@ -283,7 +283,7 @@ const looks = function (isStage, targetId, costumeName, backdropName) {
             <block id="${targetId}_size" type="looks_size"/>
         `}
         ${categorySeparator}
-    </category>
+    </category>*/
     `;
 };
 
@@ -345,7 +345,7 @@ const sound = function (isStage, targetId, soundName) {
 const events = function (isStage) {
     return `
     <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
-        <block type="event_whenflagclicked"/>
+        <!--<block type="event_whenflagclicked"/>
         <block type="event_whenkeypressed">
         </block>
         ${isStage ? `
@@ -355,7 +355,7 @@ const events = function (isStage) {
         `}
         <block type="event_whenbackdropswitchesto">
         </block>
-        ${blockSeparator}
+        ${blockSeparator}-->
         <block type="event_whengreaterthan">
             <value name="VALUE">
                 <shadow type="math_number">
@@ -363,7 +363,7 @@ const events = function (isStage) {
                 </shadow>
             </value>
         </block>
-        ${blockSeparator}
+        ${blockSeparator}<!--
         <block type="event_whenbroadcastreceived">
         </block>
         <block type="event_broadcast">
@@ -376,7 +376,7 @@ const events = function (isStage) {
               <shadow type="event_broadcast_menu"></shadow>
             </value>
         </block>
-        ${categorySeparator}
+        ${categorySeparator}-->
     </category>
     `;
 };
@@ -409,19 +409,19 @@ const control = function (isStage) {
         <block type="control_stop"/>
         ${blockSeparator}
         ${isStage ? `
-            <block type="control_create_clone_of">
+            <!--<block type="control_create_clone_of">
                 <value name="CLONE_OPTION">
                     <shadow type="control_create_clone_of_menu"/>
                 </value>
-            </block>
+            </block>-->
         ` : `
-            <block type="control_start_as_clone"/>
+            <!--<block type="control_start_as_clone"/>
             <block type="control_create_clone_of">
                 <value name="CLONE_OPTION">
                     <shadow type="control_create_clone_of_menu"/>
                 </value>
             </block>
-            <block type="control_delete_this_clone"/>
+            <block type="control_delete_this_clone"/>-->
         `}
         ${categorySeparator}
     </category>
@@ -433,7 +433,7 @@ const sensing = function (isStage) {
     return `
     <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
         ${isStage ? '' : `
-            <block type="sensing_touchingobject">
+            <!--<block type="sensing_touchingobject">
                 <value name="TOUCHINGOBJECTMENU">
                     <shadow type="sensing_touchingobjectmenu"/>
                 </value>
@@ -455,10 +455,10 @@ const sensing = function (isStage) {
                 <value name="DISTANCETOMENU">
                     <shadow type="sensing_distancetomenu"/>
                 </value>
-            </block>
+            </block>-->
             ${blockSeparator}
         `}
-        <block id="askandwait" type="sensing_askandwait">
+        <!--<block id="askandwait" type="sensing_askandwait">
             <value name="QUESTION">
                 <shadow type="text">
                     <field name="TEXT">${name}</field>
@@ -474,10 +474,10 @@ const sensing = function (isStage) {
         </block>
         <block type="sensing_mousedown"/>
         <block type="sensing_mousex"/>
-        <block type="sensing_mousey"/>
+        <block type="sensing_mousey"/>-->
         ${isStage ? '' : `
             ${blockSeparator}
-            '<block type="sensing_setdragmode" id="sensing_setdragmode"></block>'+
+            '<!--block type="sensing_setdragmode" id="sensing_setdragmode"></block-->'+
             ${blockSeparator}
         `}
         ${blockSeparator}
@@ -710,6 +710,33 @@ const myBlocks = function () {
     `;
 };
 
+// 新添加的传感器积木块
+// 和scratch-blocks中的default_toolbox对应
+const sensors = function () {
+    return `
+        <category name="%{BKY_CATEGORY_SENSORS}" id="sensors" colour="#48d1cc" secondaryColour="#20b29a">
+            <block type="sensors_getData">
+                <value name="NUM">
+                    <shadow type="math_number">
+                        <field name="NUM"/>
+                    </shadow>
+                </value>
+            </block>
+            <block type="sensors_transferData" id="sensors_transferData">
+              <value name="NUM">
+                <shadow type="math_number">
+                  <field name="NUM"></field>
+                </shadow>
+              </value>
+              <value name="NUM">
+                <shadow type="math_number">
+                  <field name="NUM"></field>
+                </shadow>
+              </value>
+            </block>
+        </category>`;
+};
+
 const xmlOpen = '<xml style="display: none">';
 const xmlClose = '</xml>';
 
@@ -733,14 +760,15 @@ const makeToolboxXML = function (isStage, targetId, categoriesXML,
     const everything = [
         xmlOpen,
         motion(isStage, targetId), gap,
-        looks(isStage, targetId, costumeName, backdropName), gap,
-        sound(isStage, targetId, soundName), gap,
+        // looks(isStage, targetId, costumeName, backdropName), gap,
+        // sound(isStage, targetId, soundName), gap,
         events(isStage, targetId), gap,
         control(isStage, targetId), gap,
         sensing(isStage, targetId), gap,
         operators(isStage, targetId), gap,
         variables(isStage, targetId), gap,
-        myBlocks(isStage, targetId)
+        myBlocks(isStage, targetId), gap,
+        sensors(isStage, targetId)
     ];
 
     if (categoriesXML) {

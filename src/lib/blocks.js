@@ -27,7 +27,7 @@ export default function (vm) {
             outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND
         };
     };
-
+    /*
     const jsonForHatBlockMenu = function (hatName, name, menuOptionsFn, colors, start) {
         return {
             message0: hatName,
@@ -46,7 +46,7 @@ export default function (vm) {
             extensions: ['shape_hat']
         };
     };
-
+    */
 
     const jsonForSensingMenus = function (menuOptionsFn) {
         return {
@@ -72,7 +72,7 @@ export default function (vm) {
             outputShape: ScratchBlocks.OUTPUT_SHAPE_ROUND
         };
     };
-
+    /*
     const soundsMenu = function () {
         let menu = [['', '']];
         if (vm.editingTarget && vm.editingTarget.sprite.sounds.length > 0) {
@@ -111,7 +111,7 @@ export default function (vm) {
             return stage.getCostumes().map(costume => [costume.name, costume.name]);
         }
         return [['', '']];
-    };
+    };*/
 
     const spriteMenu = function () {
         const sprites = [];
@@ -129,7 +129,7 @@ export default function (vm) {
         return sprites;
     };
 
-    const cloneMenu = function () {
+    /* const cloneMenu = function () {
         if (vm.editingTarget && vm.editingTarget.isStage) {
             const menu = spriteMenu();
             if (menu.length === 0) {
@@ -139,21 +139,21 @@ export default function (vm) {
         }
         const myself = ScratchBlocks.ScratchMsgs.translate('CONTROL_CREATECLONEOF_MYSELF', 'myself');
         return [[myself, '_myself_']].concat(spriteMenu());
-    };
+    };*/
 
-    const soundColors = ScratchBlocks.Colours.sounds;
+    // const soundColors = ScratchBlocks.Colours.sounds;
 
-    const looksColors = ScratchBlocks.Colours.looks;
+    // const looksColors = ScratchBlocks.Colours.looks;
 
-    const motionColors = ScratchBlocks.Colours.motion;
+    // const motionColors = ScratchBlocks.Colours.motion;
 
     const sensingColors = ScratchBlocks.Colours.sensing;
 
-    const controlColors = ScratchBlocks.Colours.control;
+    // const controlColors = ScratchBlocks.Colours.control;
 
-    const eventColors = ScratchBlocks.Colours.event;
+    // const eventColors = ScratchBlocks.Colours.event;
 
-    ScratchBlocks.Blocks.sound_sounds_menu.init = function () {
+    /* ScratchBlocks.Blocks.sound_sounds_menu.init = function () {
         const json = jsonForMenuBlock('SOUND_MENU', soundsMenu, soundColors, []);
         this.jsonInit(json);
     };
@@ -201,7 +201,7 @@ export default function (vm) {
             [mouse, '_mouse_']
         ]);
         this.jsonInit(json);
-    };
+    };*/
 
     ScratchBlocks.Blocks.sensing_of_object_menu.init = function () {
         const stage = ScratchBlocks.ScratchMsgs.translate('SENSING_OF_STAGE', 'Stage');
@@ -281,7 +281,7 @@ export default function (vm) {
         this.jsonInit(json);
     };
 
-    ScratchBlocks.Blocks.sensing_distancetomenu.init = function () {
+    /* ScratchBlocks.Blocks.sensing_distancetomenu.init = function () {
         const mouse = ScratchBlocks.ScratchMsgs.translate('SENSING_DISTANCETO_POINTER', 'mouse-pointer');
         const json = jsonForMenuBlock('DISTANCETOMENU', spriteMenu, sensingColors, [
             [mouse, '_mouse_']
@@ -302,7 +302,7 @@ export default function (vm) {
     ScratchBlocks.Blocks.control_create_clone_of_menu.init = function () {
         const json = jsonForMenuBlock('CLONE_OPTION', cloneMenu, controlColors, []);
         this.jsonInit(json);
-    };
+    };*/
 
     ScratchBlocks.VerticalFlyout.getCheckboxState = function (blockId) {
         const monitoredBlock = vm.runtime.monitorBlocks._blocks[blockId];

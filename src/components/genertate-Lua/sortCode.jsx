@@ -7,6 +7,7 @@ import starter from './sources/seperate/starter.js';
  * @param {string} data 要写的数据
  * @param {string} fileName 文件名
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function fileWriter (data = '', fileName = ' ') {
     const file = new File([data], {type: 'text/plain;charset=utf-8'});
     saveAs(file, fileName);
@@ -17,6 +18,7 @@ function fileWriter (data = '', fileName = ' ') {
  * @param {JSON} data blocks输入的Json对象
  * @return {Array} 链表队首block
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function getHats (data = {}) {
     if (data === {}) return [];
     let hats = [];
@@ -33,6 +35,7 @@ function getHats (data = {}) {
  * @param {number} depth 缩进深度
  * @return {string} 缩进字符串
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function getIndent (depth) {
     let result = '';
     for (let i = 0; i < depth; i++) result = `${result}\t`;
@@ -47,6 +50,7 @@ function getIndent (depth) {
  * @param {function} func 生成代码的方法
  * @return {string} 下一部分lua代码
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function nextCode (data, blockPart, depth, func) {
     return (blockPart == null) ? (getIndent(depth) + 'missing block' + func()) : func(data, blockPart.block, depth);
 }
@@ -58,6 +62,7 @@ function nextCode (data, blockPart, depth, func) {
  * @param {number} depth 缩进深度
  * @return {string} 相应的lua代码
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function handleControlForever (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'while(true)\n' +
@@ -67,6 +72,7 @@ function handleControlForever (data, block, depth) {
     return result;
 }
 
+// eslint-disable-next-line func-style,require-jsdoc
 function handleControlIf (data, block, depth) {
     const indent = getIndent(depth);
     // maybe should change it with function 'dealWithCondition'
@@ -76,9 +82,9 @@ function handleControlIf (data, block, depth) {
     return result;
 }
 
+// eslint-disable-next-line func-style,require-jsdoc
 function handleControlIfElse (data, block, depth) {
     const indent = getIndent(depth);
-    // maybe should change it with function 'dealWithCondition'
     const result = indent + 'if ' + nextCode(data, block.inputs.CONDITION, 0, dealWithABlock) + ' then\n'+
         nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
         indent + 'else\n' +
@@ -87,6 +93,7 @@ function handleControlIfElse (data, block, depth) {
     return result;
 }
 
+// eslint-disable-next-line func-style,require-jsdoc
 function handControlReapeatUntil (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'repeat\n' +
@@ -97,6 +104,7 @@ function handControlReapeatUntil (data, block, depth) {
 
 // 统一处理四则运算
 // opcodes 为运算操作符(String)
+// eslint-disable-next-line func-style,require-jsdoc
 function handNumOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
     const result = indent + '( ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) +
@@ -106,6 +114,7 @@ function handNumOperation (data, block, depth, opcodes) {
 }
 
 // 统一处理布尔值判断（取反除外）
+// eslint-disable-next-line func-style,require-jsdoc
 function handBooleanOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
     const result = indent + '( ' + nextCode(data, block.inputs.OPERAND1, 0, dealWithABlock) +
@@ -115,22 +124,26 @@ function handBooleanOperation (data, block, depth, opcodes) {
 }
 
 // 处理布尔取反
+// eslint-disable-next-line func-style,require-jsdoc
 function handOperatiorNot (data, block, depth) {
     const indent = getIndent(depth);
     return indent + '( not' + nextCode(data, block.inputs.OPERAND, 0, dealWithABlock) + ' )';
 }
 
 // 获取input中的数字
+// eslint-disable-next-line func-style,require-jsdoc
 function handNumbers (block) {
     return (block.fields.NUM == null) ? '' : block.fields.NUM.value;
 }
 
 // 获取text中的字符
+// eslint-disable-next-line func-style,require-jsdoc
 function handTexts (block) {
     return (block.fields.TEXT == null) ? '' : block.fields.TEXT.value;
 }
 
 // 判断block种类，调用相应的函数
+// eslint-disable-next-line func-style,require-jsdoc
 function dealWithABlock (data = {}, blockID = '', depth = 0) {
     if (data === {} || blockID === '') return '';
     const opcode = data[blockID].opcode;
@@ -167,7 +180,7 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
         case 'operator_equals': return handBooleanOperation(data, data[blockID], depth, '==');
         case 'operator_and': return handBooleanOperation(data, data[blockID], depth, 'and');
         case 'operator_or': return handBooleanOperation(data, data[blockID], depth, 'or');
-        case 'operator_not': return handOperatiorNot(data, data[blockID], depth, 'not');
+        case 'operator_not': return handOperatiorNot(data, data[blockID], depth);
         case 'operator_length': break;
         case 'operator_mod': return handNumOperation(data, data[blockID], depth, '%');
         case 'operator_round': break;
@@ -186,6 +199,7 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
  * @param depth {number} 代码深度
  * @return {string} 队列对应的lua代码
  */
+// eslint-disable-next-line func-style,require-jsdoc
 function dealWithAHat (data = {}, hatID = '', depth = 0) {
     if (data === {} || hatID === '') return '\n';
     let next = hatID;
