@@ -400,11 +400,29 @@ const control = function (isStage) {
             </value>
         </block>
         <block id="forever" type="control_forever"/>
+        <!--<block type="control_forLoop" id="control_forLoop"/>-->
         ${blockSeparator}
         <block type="control_if"/>
         <block type="control_if_else"/>
         <block id="wait_until" type="control_wait_until"/>
         <block id="repeat_until" type="control_repeat_until"/>
+        <block type="control_for_loop" id="control_for_loop">
+            <value name="NUM">
+                <shadow type="math_whole_number">
+                    <field name="NUM"></field>
+                </shadow>
+            </value>
+            <value name="NUM1">
+                <shadow type="math_whole_number">
+                    <field name="NUM"></field>
+                </shadow>
+            </value>
+            <value name="NUM2">
+                <shadow type="math_whole_number">
+                    <field name="NUM"></field>
+                </shadow>
+            </value>
+        </block>
         ${blockSeparator}
         <block type="control_stop"/>
         ${blockSeparator}
@@ -723,12 +741,12 @@ const sensors = function () {
                 </value>
             </block>
             <block type="sensors_transferData" id="sensors_transferData">
-              <value name="NUM">
+              <value name="NUM1">
                 <shadow type="math_number">
                   <field name="NUM"></field>
                 </shadow>
               </value>
-              <value name="NUM">
+              <value name="NUM2">
                 <shadow type="math_number">
                   <field name="NUM"></field>
                 </shadow>

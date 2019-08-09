@@ -1,0 +1,81 @@
+{"|+o(Nm9#Phb7@{C;]nqM":{
+	"id":"|+o(Nm9#Phb7@{C;]nqM",
+	"opcode":"sensors_transferData",
+	"inputs":{
+		"NUM":{
+			"name":"NUM",
+			"block":"OZcoUM^K2w|:=RJbv^ry",
+			"shadow":"OZcoUM^K2w|:=RJbv^ry"
+		},
+		"DATA":{
+			"name":"DATA",
+			"block":"k%;1q?=UXOQ;`SSgh{qE",
+			"shadow":null
+		}
+	},
+	"fields":{
+		"SENSORTYPE":{
+			"name":"SENSORTYPE",
+			"value":"Wheel"
+		}
+	},
+	"next":null,
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":142.37037037037032,
+	"y":296.5925925925923
+},
+"OZcoUM^K2w|:=RJbv^ry":{
+	"id":"OZcoUM^K2w|:=RJbv^ry",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"1"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"|+o(Nm9#Phb7@{C;]nqM",
+	"shadow":true
+},
+"k%;1q?=UXOQ;`SSgh{qE":{
+	"id":"k%;1q?=UXOQ;`SSgh{qE",
+	"opcode":"sensors_getData",
+	"inputs":{
+		"NUM":{
+			"name":"NUM",
+			"block":"=uQ)N(S%Q^e[q=(+Db_t",
+			"shadow":"=uQ)N(S%Q^e[q=(+Db_t"
+		}
+	},
+	"fields":{
+		"SENSORTYPE":{
+			"name":"SENSORTYPE",
+			"value":"Battery"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"|+o(Nm9#Phb7@{C;]nqM",
+	"shadow":false,
+	"x":206.07407407407402,
+	"y":392.4444444444442
+},
+"=uQ)N(S%Q^e[q=(+Db_t":{
+	"id":"=uQ)N(S%Q^e[q=(+Db_t",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"3"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"k%;1q?=UXOQ;`SSgh{qE",
+	"shadow":true
+}}

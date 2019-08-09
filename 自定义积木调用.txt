@@ -1,0 +1,93 @@
+﻿{"@2~Mg7;bi}C|Mx_OLv9%":{
+"id":"@2~Mg7;bi}C|Mx_OLv9%",
+"opcode":"procedures_definition",
+"inputs":{"custom_block":{"name":"custom_block","block":"*AAhY|+n*4T?PloOIBla","shadow":"*AAhY|+n*4T?PloOIBla"}},
+"fields":{},
+"next":null,
+"topLevel":true,
+"parent":null,
+"shadow":false,
+"x":44.44444444444377,"y":-382.5185185185199},
+
+"*AAhY|+n*4T?PloOIBla":{
+"id":"*AAhY|+n*4T?PloOIBla",
+"opcode":"procedures_prototype",
+"inputs":{
+	"upuNeOZ[!wHd$`Xp*dub":{"name":"upuNeOZ[!wHd$`Xp*dub","block":"p;Mg|`PfjmCS-9fhcSfO","shadow":"p;Mg|`PfjmCS-9fhcSfO"},
+	"?pnvFYd3Kf]19x8w5`ZB":{"name":"?pnvFYd3Kf]19x8w5`ZB","block":")4V9Yzb{7cZr*g#a`1V:","shadow":")4V9Yzb{7cZr*g#a`1V:"}
+},
+"fields":{},
+"next":null,
+"topLevel":false,
+"parent":"@2~Mg7;bi}C|Mx_OLv9%",
+"shadow":true,
+"mutation":{
+	"tagName":"mutation",
+	"children":[],
+	"proccode":"积木名称 %s %s",
+	"argumentids":"[\"upuNeOZ[!wHd$`Xp*dub\",\"?pnvFYd3Kf]19x8w5`ZB\"]",
+	"argumentnames":"[\"first\",\"second\"]",
+	"argumentdefaults":"[\"\",\"\"]",
+	"warp":"false"
+}},
+
+"p;Mg|`PfjmCS-9fhcSfO":{
+"id":"p;Mg|`PfjmCS-9fhcSfO",
+"opcode":"argument_reporter_string_number",
+"inputs":{},
+"fields":{"VALUE":{"name":"VALUE","value":"first"}},
+"next":null,
+"topLevel":false,
+"parent":"*AAhY|+n*4T?PloOIBla",
+"shadow":true},
+
+")4V9Yzb{7cZr*g#a`1V:":{
+"id":")4V9Yzb{7cZr*g#a`1V:",
+"opcode":"argument_reporter_string_number",
+"inputs":{},
+"fields":{"VALUE":{"name":"VALUE","value":"second"}},
+"next":null,
+"topLevel":false,
+"parent":"*AAhY|+n*4T?PloOIBla",
+"shadow":true},
+
+"SLiy=j3EPQio]h(Pp!kU":{
+"id":"SLiy=j3EPQio]h(Pp!kU",
+"opcode":"procedures_call",
+"inputs":{
+	"upuNeOZ[!wHd$`Xp*dub":{"name":"upuNeOZ[!wHd$`Xp*dub","block":"Z4*kGB/c{e0|nm%OwLE9","shadow":"Z4*kGB/c{e0|nm%OwLE9"},
+	"?pnvFYd3Kf]19x8w5`ZB":{"name":"?pnvFYd3Kf]19x8w5`ZB","block":"UKVRfVZDD,:KwIGwGx.j","shadow":"UKVRfVZDD,:KwIGwGx.j"}},
+"fields":{},
+"next":null,
+"topLevel":true,
+"parent":null,
+"shadow":false,
+"x":333.4814814814807,
+"y":-388.1481481481498,
+"mutation":{
+	"tagName":"mutation",
+	"children":[],
+	"proccode":"积木名称 %s %s",
+	"argumentids":"[\"upuNeOZ[!wHd$`Xp*dub\",\"?pnvFYd3Kf]19x8w5`ZB\"]",
+	"warp":"false"}},
+
+"Z4*kGB/c{e0|nm%OwLE9":{
+"id":"Z4*kGB/c{e0|nm%OwLE9",
+"opcode":"text",
+"inputs":{},
+"fields":{"TEXT":{"name":"TEXT","value":"aa"}},
+"next":null,
+"topLevel":false,
+"parent":"SLiy=j3EPQio]h(Pp!kU",
+"shadow":true},
+
+"UKVRfVZDD,:KwIGwGx.j":{
+"id":"UKVRfVZDD,:KwIGwGx.j",
+"opcode":"text",
+"inputs":{},
+"fields":{"TEXT":{"name":"TEXT","value":"bb"}},
+"next":null,
+"topLevel":false,
+"parent":"SLiy=j3EPQio]h(Pp!kU",
+"shadow":true
+}}

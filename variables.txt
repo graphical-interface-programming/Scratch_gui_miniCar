@@ -1,0 +1,99 @@
+﻿{"6Z7@V;p/y-*_W?^iWC%a":{
+	"id":"6Z7@V;p/y-*_W?^iWC%a",
+	"opcode":"data_setvariableto",
+	"inputs":{
+		"VALUE":{
+			"name":"VALUE",
+			"block":":pdLWDb=Aqq(gq:jszYC",
+			"shadow":":pdLWDb=Aqq(gq:jszYC"
+		}
+	},
+	"fields":{
+		"VARIABLE":{
+			"name":"VARIABLE",
+			"id":"`jEk@4|i[#Fk?(8x)AV.-my variable",
+			"value":"我的变量",
+			"variableType":""
+		}
+	},
+	"next":"$CP@I,UAF)hx+T#Y1E,g",
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":274.222222222222,
+	"y":258.10323339212397
+},
+":pdLWDb=Aqq(gq:jszYC":{
+	"id":":pdLWDb=Aqq(gq:jszYC",
+	"opcode":"text",
+	"inputs":{},
+	"fields":{
+		"TEXT":{
+			"name":"TEXT",
+			"value":"0"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"6Z7@V;p/y-*_W?^iWC%a",
+	"shadow":true
+},
+"t4(9@/n*`zm/MUVSv=TO":{
+	"id":"t4(9@/n*`zm/MUVSv=TO",
+	"opcode":"data_variable",
+	"inputs":{},
+	"fields":{
+		"VARIABLE":{
+			"name":"VARIABLE",
+			"id":"`jEk@4|i[#Fk?(8x)AV.-my variable",
+			"value":"我的变量",
+			"variableType":""
+		}
+	},
+	"next":null,
+	"topLevel":true,
+	"parent":null,
+	"shadow":false,
+	"x":281.5925925925921,
+	"y":183.732863021753
+},
+"$CP@I,UAF)hx+T#Y1E,g":{
+	"id":"$CP@I,UAF)hx+T#Y1E,g",
+	"opcode":"data_changevariableby",
+	"inputs":{
+		"VALUE":{
+			"name":"VALUE",
+			"block":"4y`Fl^Oas!?OWbj/%8.z",
+			"shadow":"4y`Fl^Oas!?OWbj/%8.z"
+		}
+	},
+	"fields":{
+		"VARIABLE":{
+			"name":"VARIABLE",
+			"id":"`jEk@4|i[#Fk?(8x)AV.-my variable",
+			"value":"我的变量",
+			"variableType":""
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"6Z7@V;p/y-*_W?^iWC%a",
+	"shadow":false,
+	"x":"-358",
+	"y":"285"
+},
+"4y`Fl^Oas!?OWbj/%8.z":{
+	"id":"4y`Fl^Oas!?OWbj/%8.z",
+	"opcode":"math_number",
+	"inputs":{},
+	"fields":{
+		"NUM":{
+			"name":"NUM",
+			"value":"1"
+		}
+	},
+	"next":null,
+	"topLevel":false,
+	"parent":"$CP@I,UAF)hx+T#Y1E,g",
+	"shadow":true
+}}

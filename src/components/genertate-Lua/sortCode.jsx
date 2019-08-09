@@ -7,7 +7,6 @@ import starter from './sources/seperate/starter.js';
  * @param {string} data 要写的数据
  * @param {string} fileName 文件名
  */
-// eslint-disable-next-line func-style,require-jsdoc
 function fileWriter (data = '', fileName = ' ') {
     const file = new File([data], {type: 'text/plain;charset=utf-8'});
     saveAs(file, fileName);
@@ -18,12 +17,15 @@ function fileWriter (data = '', fileName = ' ') {
  * @param {JSON} data blocks输入的Json对象
  * @return {Array} 链表队首block
  */
-// eslint-disable-next-line func-style,require-jsdoc
 function getHats (data = {}) {
     if (data === {}) return [];
     let hats = [];
     for (let id in data){
-        if (data[id].topLevel === true) {
+        if (data[id].topLevel === true &&
+            data[id].opcode != 'math_positive_number' &&
+            data[id].opcode != 'math_whole_number' &&
+            data[id].opcode != 'math_number' &&
+            data[id].opcode != 'text') {
             hats.push(id);
         }
     }
@@ -35,7 +37,6 @@ function getHats (data = {}) {
  * @param {number} depth 缩进深度
  * @return {string} 缩进字符串
  */
-// eslint-disable-next-line func-style,require-jsdoc
 function getIndent (depth) {
     let result = '';
     for (let i = 0; i < depth; i++) result = `${result}\t`;
@@ -50,7 +51,6 @@ function getIndent (depth) {
  * @param {function} func 生成代码的方法
  * @return {string} 下一部分lua代码
  */
-// eslint-disable-next-line func-style,require-jsdoc
 function nextCode (data, blockPart, depth, func) {
     return (blockPart == null) ? (getIndent(depth) + 'missing block' + func()) : func(data, blockPart.block, depth);
 }
@@ -62,7 +62,6 @@ function nextCode (data, blockPart, depth, func) {
  * @param {number} depth 缩进深度
  * @return {string} 相应的lua代码
  */
-// eslint-disable-next-line func-style,require-jsdoc
 function handleControlForever (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'while(true)\n' +
@@ -72,7 +71,11 @@ function handleControlForever (data, block, depth) {
     return result;
 }
 
-// eslint-disable-next-line func-style,require-jsdoc
+function handleWait (data, block, depth) {
+    const indent = getIndent(depth);
+    return indent + 'delay_ms(' + nextCode(data, block.inputs.DURATION, 0, dealWithABlock) + ')\n';
+}
+
 function handleControlIf (data, block, depth) {
     const indent = getIndent(depth);
     // maybe should change it with function 'dealWithCondition'
@@ -82,7 +85,6 @@ function handleControlIf (data, block, depth) {
     return result;
 }
 
-// eslint-disable-next-line func-style,require-jsdoc
 function handleControlIfElse (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'if ' + nextCode(data, block.inputs.CONDITION, 0, dealWithABlock) + ' then\n'+
@@ -93,8 +95,7 @@ function handleControlIfElse (data, block, depth) {
     return result;
 }
 
-// eslint-disable-next-line func-style,require-jsdoc
-function handControlReapeatUntil (data, block, depth) {
+function handleControlReapeatUntil (data, block, depth) {
     const indent = getIndent(depth);
     const result = indent + 'repeat\n' +
         nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
@@ -102,10 +103,24 @@ function handControlReapeatUntil (data, block, depth) {
     return result;
 }
 
+function handleControlForLoop (data, block, depth) {
+    const indent = getIndent(depth);
+    const result = indent + 'for ' + block.fields.VARIABLE.value +
+        '=' + nextCode(data, block.inputs.NUM, 0, dealWithABlock) +
+        ', ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) +
+        ', ' + nextCode(data, block.inputs.NUM2, 0, dealWithABlock) + ' do\n' +
+        nextCode(data, block.inputs.SUBSTACK, depth+1, dealWithAHat) +
+        indent + 'end\n';
+    return result;
+}
+
+function handleTimer () {
+    return 'HAL_GetTick()';
+}
+
 // 统一处理四则运算
 // opcodes 为运算操作符(String)
-// eslint-disable-next-line func-style,require-jsdoc
-function handNumOperation (data, block, depth, opcodes) {
+function handleNumOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
     const result = indent + '( ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) +
         ' ' + opcodes + ' ' +
@@ -114,8 +129,7 @@ function handNumOperation (data, block, depth, opcodes) {
 }
 
 // 统一处理布尔值判断（取反除外）
-// eslint-disable-next-line func-style,require-jsdoc
-function handBooleanOperation (data, block, depth, opcodes) {
+function handleBooleanOperation (data, block, depth, opcodes) {
     const indent = getIndent(depth);
     const result = indent + '( ' + nextCode(data, block.inputs.OPERAND1, 0, dealWithABlock) +
         ' ' + opcodes + ' ' +
@@ -124,22 +138,72 @@ function handBooleanOperation (data, block, depth, opcodes) {
 }
 
 // 处理布尔取反
-// eslint-disable-next-line func-style,require-jsdoc
-function handOperatiorNot (data, block, depth) {
+function handleOperatiorNot (data, block, depth) {
     const indent = getIndent(depth);
     return indent + '( not' + nextCode(data, block.inputs.OPERAND, 0, dealWithABlock) + ' )';
 }
 
+// 处理设置变量
+function handleSetVariable (data, block, depth) {
+    const indent = getIndent(depth);
+    const result = indent + block.fields.VARIABLE.value + ' = '+
+        nextCode(data, block.inputs.VALUE, 0, dealWithABlock) + '\n';
+    return result;
+}
+
+// 处理修改变量
+function handleChangeVariable (data, block, depth) {
+    const indent = getIndent(depth);
+    const variable = block.fields.VARIABLE.value;
+    const result = indent + variable + ' = ' + variable + ' + ' +
+        nextCode(data, block.inputs.VALUE, 0, dealWithABlock) + '\n';
+    return result;
+}
+
+function handleGetVariable (data, block, depth) {
+    return getIndent(depth) + block.fields.VARIABLE.value;
+}
+
+function handleGetList (data, block, depth) {
+    return getIndent(depth) + block.fields.LIST.value;
+}
+
+function handleForIter (data, block, depth) {
+    const indent = getIndent(depth);
+    const list = block.fields.LIST.value;
+    const result = indent + 'for ' + nextCode(data, block.inputs.VALUE, 0, dealWithABlock) +
+        ', ' + nextCode(data, block.inputs.ITEM, 0, dealWithABlock) +
+        ' in pairs(' + list + ') do\n' +
+        nextCode(data, block.inputs.SUBSTACK, depth+1, dealWithAHat) +
+        indent + 'end\n';
+    return result;
+}
+// 从传感器获取数据
+
 // 获取input中的数字
 // eslint-disable-next-line func-style,require-jsdoc
-function handNumbers (block) {
+function handleNumbers (block) {
     return (block.fields.NUM == null) ? '' : block.fields.NUM.value;
 }
 
 // 获取text中的字符
 // eslint-disable-next-line func-style,require-jsdoc
-function handTexts (block) {
+function handleTexts (block) {
     return (block.fields.TEXT == null) ? '' : block.fields.TEXT.value;
+}
+
+function handleFunctionCall (data, block, depth) {
+    const indent = getIndent(depth);
+    const result = indent + getFunctionName(data, block.id) +
+        '( ' + getCallingParams(data, block.id) + ')\n';
+    return result;
+}
+
+function handleArgumentReporter (data, block, depth, isBool) {
+    if (isBool){
+        return getIndent(depth) + '( ' + block.fields.VALUE.value + ')';
+    }
+    return getIndent(depth) + block.fields.VALUE.value;
 }
 
 // 判断block种类，调用相应的函数
@@ -152,43 +216,53 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
         case 'motion_movesteps': break;
         case 'motion_turnright': break;
         case 'motion_turnleft': break;
-        case 'motion_pointindirection': break;
         // events
-        case 'event_whenflagclicked': break;
         case 'event_whengreaterthan': break;
-        case 'event_whenbroadcastreceived': break;
-        case 'event_broadcast': break;
-        case 'event_broadcastandwait': break;
         // control
-        case 'control_wait': break;
+        case 'control_wait': return handleWait(data, data[blockID], depth);
         case 'control_repeat': break;
         case 'control_forever': return handleControlForever(data, data[blockID], depth);
         case 'control_if': return handleControlIf(data, data[blockID], depth);
         case 'control_if_else': return handleControlIfElse(data, data[blockID], depth);
-        case 'control_repeat_until': return handControlReapeatUntil(data, data[blockID], depth);
+        case 'control_repeat_until': return handleControlReapeatUntil(data, data[blockID], depth);
+        case 'control_for_loop': return handleControlForLoop(data, data[blockID], depth);
         case 'control_stop': break;
         // sensing
-        case '': break;
+        case 'sensing_timer': return handleTimer();
         // operate
-        case 'operator_add': return handNumOperation(data, data[blockID], depth, '+');
-        case 'operator_subtract': return handNumOperation(data, data[blockID], depth, '-');
-        case 'operator_multiply': return handNumOperation(data, data[blockID], depth, '*');
-        case 'operator_divide': return handNumOperation(data, data[blockID], depth, '/');
+        case 'operator_add': return handleNumOperation(data, data[blockID], depth, '+');
+        case 'operator_subtract': return handleNumOperation(data, data[blockID], depth, '-');
+        case 'operator_multiply': return handleNumOperation(data, data[blockID], depth, '*');
+        case 'operator_divide': return handleNumOperation(data, data[blockID], depth, '/');
         case 'operator_random': break;
-        case 'operator_gt': return handBooleanOperation(data, data[blockID], depth, '>');
-        case 'operator_lt': return handBooleanOperation(data, data[blockID], depth, '<');
-        case 'operator_equals': return handBooleanOperation(data, data[blockID], depth, '==');
-        case 'operator_and': return handBooleanOperation(data, data[blockID], depth, 'and');
-        case 'operator_or': return handBooleanOperation(data, data[blockID], depth, 'or');
-        case 'operator_not': return handOperatiorNot(data, data[blockID], depth);
+        case 'operator_gt': return handleBooleanOperation(data, data[blockID], depth, '>');
+        case 'operator_lt': return handleBooleanOperation(data, data[blockID], depth, '<');
+        case 'operator_equals': return handleBooleanOperation(data, data[blockID], depth, '==');
+        case 'operator_and': return handleBooleanOperation(data, data[blockID], depth, 'and');
+        case 'operator_or': return handleBooleanOperation(data, data[blockID], depth, 'or');
+        case 'operator_not': return handleOperatiorNot(data, data[blockID], depth);
         case 'operator_length': break;
-        case 'operator_mod': return handNumOperation(data, data[blockID], depth, '%');
+        case 'operator_mod': return handleNumOperation(data, data[blockID], depth, '%');
         case 'operator_round': break;
         case 'operator_mathop': break;
+        // data
+        case 'data_setvariableto': return handleSetVariable(data, data[blockID], depth);
+        case 'data_changevariableby': return handleChangeVariable(data, data[blockID], depth);
+        case 'data_for_iter': return handleForIter(data, data[blockID], depth);
+        case 'data_variable': return handleGetVariable(data, data[blockID], depth);
+        case 'data_listcontents': return handleGetList(data, data[blockID], depth);
+        // sensors
+        case 'sensors_getData': break;
+        case 'sensors_transferData': break;
         // others
-        case 'math_number': return handNumbers(data[blockID]);
-        case 'text': return handTexts(data[blockID]);
-        default: return '';
+        case 'math_positive_number': return handleNumbers(data[blockID]);
+        case 'math_whole_number': return handleNumbers(data[blockID]);
+        case 'math_number': return handleNumbers(data[blockID]);
+        case 'text': return handleTexts(data[blockID]);
+        case 'procedures_call': return handleFunctionCall(data, data[blockID], depth);
+        case 'argument_reporter_string_number': return handleArgumentReporter(data, data[blockID], depth, false);
+        case 'argument_reporter_boolean': return handleArgumentReporter(data, data[blockID], depth, true);
+        default: alert(`cannot determine block type ${opcode}`); return '';
     }
 }
 
@@ -211,6 +285,37 @@ function dealWithAHat (data = {}, hatID = '', depth = 0) {
     return result;
 }
 
+function getFunctionName (data, blockID) {
+    return data[blockID].mutation.proccode.split(' ')[0];
+}
+
+function getProtoParams (data, blockID) {
+    let result = data[blockID].mutation.argumentnames.replace('["', '');
+    result = result.replace('"]', '');
+    result = result.replace(/","/g, ', ');
+    if (result == '[]') return '';
+    return result;
+}
+
+function getCallingParams (data, blockID) {
+    const block = data[blockID];
+    const inputs = block.inputs;
+    let result = [];
+    for (let id in inputs) {
+        result.push(dealWithABlock(data, inputs[id].block, 0));
+    }
+    return result.join(', ');
+}
+
+function funcDefinitions (data, definitionId) {
+    const functionId = data[definitionId].inputs.custom_block.block
+    const result = 'function ' + getFunctionName(data, functionId) +
+        ' ( ' + getProtoParams(data, functionId) + ' )\n' +
+        dealWithAHat(data, data[definitionId].next, 1) +
+        'end\n';
+    return result;
+}
+
 /**
  * 获取lua代码根函数
  * @param data {JSON} 输入blocks的JSON对象
@@ -218,13 +323,17 @@ function dealWithAHat (data = {}, hatID = '', depth = 0) {
 const getCode = function (data = {}) {
     if (data === {}) return;
     const hats = getHats(data);
-    let result = [defaultCodes];
+    let funtionDefinitions = [];
+    let result = [];
     for (let id in hats){
-        result.push(dealWithAHat(data, hats[id]));
+        if (data[hats[id]].opcode === 'procedures_definition') {
+            funtionDefinitions.push(funcDefinitions(data, hats[id]));
+        } else {
+            result.push(dealWithAHat(data, hats[id]));
+        }
     }
-    result.push(starter);
     const result2 = JSON.stringify(data);
     fileWriter(result2, 'data.txt');
-    fileWriter(result.join('\n'), 'luaCode.lua');
+    fileWriter(defaultCodes + funtionDefinitions.join('\n') + result.join('\n'), 'luaCode.lua');
 };
 export {getCode};
