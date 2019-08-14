@@ -127,3 +127,7 @@ You can publish the GUI to github.io so that others on the Internet can view it.
 
 ## Donate
 We provide [Scratch](https://scratch.mit.edu) free of charge, and want to keep it that way! Please consider making a [donation](https://secure.donationpay.org/scratchfoundation/) to support our continued engineering, design, community, and resource development efforts. Donations of any size are appreciated. Thank you!
+
+# 开发说明
+###### edit by LASTiMP
+* 新添加的block-lua转换模块在src\gener

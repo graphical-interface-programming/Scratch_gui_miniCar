@@ -1,7 +1,9 @@
 import saveAs from './FileSaver.js';
 import defaultCodes from './sources/seperate/default_codes.js';
-import starter from './sources/seperate/starter.js';
 
+/**
+ * @author LASTiMP
+ */
 /**
  * 写文件
  * @param {string} data 要写的数据
@@ -14,6 +16,7 @@ function fileWriter (data = '', fileName = ' ') {
 
 /**
  * 获得blocks链首
+ * 若添加了新的基础输入快，需要添加进hat黑名单
  * @param {JSON} data blocks输入的Json对象
  * @return {Array} 链表队首block
  */
@@ -25,6 +28,7 @@ function getHats (data = {}) {
             data[id].opcode != 'math_positive_number' &&
             data[id].opcode != 'math_whole_number' &&
             data[id].opcode != 'math_number' &&
+            data[id].opcode != 'math_integer' &&
             data[id].opcode != 'text') {
             hats.push(id);
         }
@@ -71,9 +75,21 @@ function handleControlForever (data, block, depth) {
     return result;
 }
 
+function handleInit (data, block) {
+    return nextCode(data, block.next, 0, dealWithAHat);
+}
+
 function handleWait (data, block, depth) {
     const indent = getIndent(depth);
     return indent + 'delay_ms(' + nextCode(data, block.inputs.DURATION, 0, dealWithABlock) + ')\n';
+}
+
+function handleRepeat (data, block, depth){
+    const indent = getIndent(depth);
+    const result = indent + 'for( LASTIMP = 1, ' + nextCode(data, block.inputs.TIMES, 0, dealWithABlock) + ', 1) do\n' +
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
+        indent + 'end\n';
+    return result;
 }
 
 function handleControlIf (data, block, depth) {
@@ -109,7 +125,7 @@ function handleControlForLoop (data, block, depth) {
         '=' + nextCode(data, block.inputs.NUM, 0, dealWithABlock) +
         ', ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) +
         ', ' + nextCode(data, block.inputs.NUM2, 0, dealWithABlock) + ' do\n' +
-        nextCode(data, block.inputs.SUBSTACK, depth+1, dealWithAHat) +
+        nextCode(data, block.inputs.SUBSTACK, depth + 1, dealWithAHat) +
         indent + 'end\n';
     return result;
 }
@@ -168,6 +184,45 @@ function handleGetList (data, block, depth) {
     return getIndent(depth) + block.fields.LIST.value;
 }
 
+function handleReplaceItemOfList (data, block, depth) {
+    const index = nextCode(data, block.inputs.INDEX, 0, dealWithABlock);
+    return getIndent(depth) + block.fields.LIST.value +
+        ((index == 'all')? '' : '[' + index + ']') +
+        ' = ' + ((index == 'all')? '{' : '') + nextCode(data, block.inputs.ITEM, 0, dealWithABlock) + ((index == 'all')? '}' : '') + '\n';
+}
+
+function handleItemOfList (data, block, depth) {
+    return getIndent(depth) + block.fields.LIST.value + '[' + nextCode(data, block.inputs.INDEX, 0, dealWithABlock) + ']';
+}
+
+function handleDeleteAllOfList (data, block, depth) {
+    return getIndent(depth) + block.fields.LIST.value + ' = {}\n';
+}
+
+function handleGetData (data, block, depth) {
+    const indent = getIndent(depth);
+    let sensorId;
+    switch (block.fields.SENSORTYPE.value) {
+        case 'Infrared': sensorId = '15'; break;
+        default: sensorId = 'undefind sensor'; break;
+    }
+    const result = indent + 'sendCanMsg(' + sensorId + ')';
+    return result;
+}
+
+function handleTransferData (data, block, depth) {
+    const indent = getIndent(depth);
+    let sensorId;
+    switch (block.fields.SENSORTYPE.value) {
+        case 'led': sensorId = '12'; break;
+        case 'digi': sensorId = '11'; break;
+        case 'zxm digi': sensorId = '13'; break;
+        case 'Wheel': sensorId = '18'; break;
+        default: sensorId = 'undefind sensor'; break;
+    }
+    return indent + 'sendCanMsg(' + sensorId + ', ' + nextCode(data, block.inputs.NUM1, 0, dealWithABlock) + ')\n';
+}
+
 function handleForIter (data, block, depth) {
     const indent = getIndent(depth);
     const list = block.fields.LIST.value;
@@ -217,16 +272,16 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
         case 'motion_turnright': break;
         case 'motion_turnleft': break;
         // events
-        case 'event_whengreaterthan': break;
+        case 'event_initial': return handleInit(data, data[blockID], depth);
         // control
         case 'control_wait': return handleWait(data, data[blockID], depth);
-        case 'control_repeat': break;
+        case 'control_repeat': return handleRepeat(data, data[blockID], depth);
         case 'control_forever': return handleControlForever(data, data[blockID], depth);
         case 'control_if': return handleControlIf(data, data[blockID], depth);
         case 'control_if_else': return handleControlIfElse(data, data[blockID], depth);
         case 'control_repeat_until': return handleControlReapeatUntil(data, data[blockID], depth);
         case 'control_for_loop': return handleControlForLoop(data, data[blockID], depth);
-        case 'control_stop': break;
+        case 'control_stop': return getIndent(depth) + 'return\n';
         // sensing
         case 'sensing_timer': return handleTimer();
         // operate
@@ -251,13 +306,17 @@ function dealWithABlock (data = {}, blockID = '', depth = 0) {
         case 'data_for_iter': return handleForIter(data, data[blockID], depth);
         case 'data_variable': return handleGetVariable(data, data[blockID], depth);
         case 'data_listcontents': return handleGetList(data, data[blockID], depth);
+        case 'data_replaceitemoflist': return handleReplaceItemOfList(data, data[blockID], depth);
+        case 'data_itemoflist': return handleItemOfList(data, data[blockID], depth);
+        case 'data_deletealloflist': return handleDeleteAllOfList(data, data[blockID], depth);
         // sensors
-        case 'sensors_getData': break;
-        case 'sensors_transferData': break;
+        case 'sensors_getData': return handleGetData(data, data[blockID], depth);
+        case 'sensors_transferData': return handleTransferData(data, data[blockID], depth);
         // others
         case 'math_positive_number': return handleNumbers(data[blockID]);
         case 'math_whole_number': return handleNumbers(data[blockID]);
         case 'math_number': return handleNumbers(data[blockID]);
+        case 'math_integer': return handleNumbers(data[blockID]);
         case 'text': return handleTexts(data[blockID]);
         case 'procedures_call': return handleFunctionCall(data, data[blockID], depth);
         case 'argument_reporter_string_number': return handleArgumentReporter(data, data[blockID], depth, false);
@@ -325,15 +384,19 @@ const getCode = function (data = {}) {
     const hats = getHats(data);
     let funtionDefinitions = [];
     let result = [];
+    let initial = [];
     for (let id in hats){
         if (data[hats[id]].opcode === 'procedures_definition') {
             funtionDefinitions.push(funcDefinitions(data, hats[id]));
+        } else if (data[hats[id]].opcode === 'event_initial') {
+            initial.push(dealWithAHat(data, hats[id]));
         } else {
             result.push(dealWithAHat(data, hats[id]));
         }
     }
     const result2 = JSON.stringify(data);
     fileWriter(result2, 'data.txt');
-    fileWriter(defaultCodes + funtionDefinitions.join('\n') + result.join('\n'), 'luaCode.lua');
+    fileWriter(defaultCodes + initial.join('\n') +
+        '\n' + funtionDefinitions.join('\n') + '\n' + result.join('\n'), 'luaCode.lua');
 };
 export {getCode};

@@ -5,7 +5,7 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 
 import ControlsComponent from '../components/controls/controls.jsx';
-import {getCode} from '../components/genertate-Lua/sortCode.jsx';
+import {getCode} from '../components/generate-Lua/sortCode.jsx';
 
 class Controls extends React.Component {
     constructor (props) {
@@ -31,7 +31,7 @@ class Controls extends React.Component {
         e.preventDefault();
         this.props.vm.stopAll();
     }
-
+    // 生成lua代码按钮监听
     handleGenerateLuaClick (e) {
         e.preventDefault();
         const data = this.props.vm.runtime.targets[1].sprite.blocks._blocks;

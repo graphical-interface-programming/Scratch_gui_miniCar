@@ -13,7 +13,7 @@ const motion = function (isStage, targetId) {
     <category name="%{BKY_CATEGORY_MOTION}" id="motion" colour="#4C97FF" secondaryColour="#3373CC">
         ${isStage ? `
         <label text="${stageSelected}"></label>
-        ` : `
+        ` : `<!--
         <block type="motion_movesteps">
             <value name="STEPS">
                 <shadow type="math_number">
@@ -35,7 +35,7 @@ const motion = function (isStage, targetId) {
                 </shadow>
             </value>
         </block>
-        ${blockSeparator} <!--
+        ${blockSeparator} 
         <block type="motion_goto">
             <value name="TO">
                 <shadow type="motion_goto_menu">
@@ -345,6 +345,7 @@ const sound = function (isStage, targetId, soundName) {
 const events = function (isStage) {
     return `
     <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
+        <block type="event_initial"/>
         <!--<block type="event_whenflagclicked"/>
         <block type="event_whenkeypressed">
         </block>
@@ -355,14 +356,14 @@ const events = function (isStage) {
         `}
         <block type="event_whenbackdropswitchesto">
         </block>
-        ${blockSeparator}-->
+        ${blockSeparator}
         <block type="event_whengreaterthan">
             <value name="VALUE">
                 <shadow type="math_number">
                     <field name="NUM">10</field>
                 </shadow>
             </value>
-        </block>
+        </block>-->
         ${blockSeparator}<!--
         <block type="event_whenbroadcastreceived">
         </block>

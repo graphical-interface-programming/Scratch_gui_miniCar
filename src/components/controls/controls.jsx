@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
-import GenertateLua from '../genertate-Lua/genertate-Lua.jsx';
+import GenerateLua from '../generate-Lua/generate-Lua.jsx';
 import GreenFlag from '../green-flag/green-flag.jsx';
 import StopAll from '../stop-all/stop-all.jsx';
 import TurboMode from '../turbo-mode/turbo-mode.jsx';
@@ -53,7 +53,7 @@ const Controls = function (props) {
                 title={intl.formatMessage(messages.stopTitle)}
                 onClick={onStopAllClick}
             />
-            <GenertateLua
+            <GenerateLua
                 active={active}
                 title={intl.formatMessage(messages.luaTitle)}
                 onClick={onGenerateLuaClick}

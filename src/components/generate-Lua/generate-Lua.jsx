@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import LuaIcon from './icon--genertate-Lua.svg';
-import styles from './genertate-Lua.css';
+import LuaIcon from './icon--generate-Lua.svg';
+import styles from './generate-Lua.css';
 import {fileWriter, fileReader} from './sortCode.jsx';
 import ScratchBlocks from 'scratch-blocks';
 
@@ -19,7 +19,7 @@ const GenerateLuaComponent = function (props) {
         <img
             className={classNames(
                 className,
-                styles.genertateLua,
+                styles.generateLua,
                 {
                     [styles.isActive]: active
                 }

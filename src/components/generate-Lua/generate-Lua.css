@@ -1,6 +1,6 @@
 @import "../../css/colors.css";
 
-.genertate-Lua {
+.generate-Lua {
     width: 2rem;
     height: 2rem;
     padding: 0.375rem;
@@ -9,14 +9,14 @@
     cursor: pointer;
 }
 
-.genertate-Lua:hover {
+.generate-Lua:hover {
     background-color: $motion-light-transparent;
 }
 
-.genertate-Lua {
+.generate-Lua {
     opacity: 0.5;
 }
 
-.genertate-Lua.is-active {
+.generate-Lua.is-active {
     background-color: $motion-transparent;
 }
